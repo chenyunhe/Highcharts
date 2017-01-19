@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <title></title>
+    <script type="text/javascript" src="jquery-easyui-1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="/res/js/highcharts.js"></script>
+</head>
+<body style="padding:0px;margin:0px">
+<table id="dg" style="width:100%;"></table>
+
+<div id="container" style="min-width:400px;height:400px"></div>
+
+<script type="text/javascript">
+   
+    function makegraph(){
+        <?php
+        $arr = array(
+            'test1'=>100,
+            'test2'=>200,
+            'test3'=>50,
+            'test4'=>10
+        );
+        echo <<<EOT
+        $('#container').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '付费人数总览'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                type: 'category',
+                labels: {
+                    rotation: -45,
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: ''
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            tooltip: {
+            },
+            series: [{
+                name: '人数',
+                data:[
+EOT;
+        foreach ($arr as $key => $value)
+        {
+            echo "['".$key."', ".$value."],";
+        }
+        echo "],
+                dataLabels:{
+                    enabled: true,
+                    rotation: -90,
+                    color: '#FFFFFF',
+                    align: 'right',
+                    format: '{point.y:.1f}', // one decimal
+                    y: 10, // 10 pixels down from the top
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
+            }]
+        });"
+         ?>
+    }
+
+</script>
+</body>
+</html>
+#####
+在做柱状图是 遇到的的 data不能通过js赋值  通过php赋值  
+重点是 echo <<<EOT   EOT;的使用  且 EOT位置必须放在行首  否则生效
